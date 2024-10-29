@@ -1,0 +1,10 @@
+gateways:
+  local:
+    connection:
+      type: bigquery
+      project: sqlmesh-test-project
+
+default_gateway: local
+
+model_defaults:
+  dialect: bigquery
