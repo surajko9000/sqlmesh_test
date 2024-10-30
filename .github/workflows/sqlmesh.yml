@@ -5,6 +5,7 @@ on:
     types:
     - synchronize
     - opened
+    - closed
 # The latest commit is the one that will be used to create the PR environment and deploy to production
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
@@ -25,13 +26,22 @@ jobs:
     steps:
       - name: Setup Python
         uses: actions/setup-python@v4
-      - name: Checkout PR branch
-        uses: actions/checkout@v4
+        if: github.event.pull_request.merged == false
         with:
           ref: refs/pull/${{ github.event.issue.pull_request && github.event.issue.number || github.event.pull_request.number  }}/merge
+      - name: Checkout PR branch
+        if: github.event.pull_request.merged == true
+        uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Install SQLMesh + Dependencies
         run: pip install -r requirements.txt
         shell: bash
       - name: Run CI/CD Bot
+        if: github.event.pull_request.merged == false
         run: |
           sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
+      - name: Deploy to Production
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+        run: |
+          sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} deploy-production
