@@ -36,7 +36,7 @@ jobs:
           ref: main
       - name: Install SQLMesh + Dependencies
         run: pip install -r requirements.txt
-        shell: bash
+        shell: pwsh
       - name: Run CI/CD Bot
         if: github.event.pull_request.merged == false
         run: |
