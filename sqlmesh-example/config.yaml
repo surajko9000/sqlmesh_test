@@ -8,3 +8,6 @@ default_gateway: local
 
 model_defaults:
   dialect: bigquery
+
+cicd_bot:
+  type: github
