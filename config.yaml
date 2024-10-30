@@ -1,0 +1,15 @@
+gateways:
+  local:
+    connection:
+      type: bigquery
+      project: sqlmesh-test-project
+
+default_gateway: local
+
+model_defaults:
+  dialect: bigquery
+
+cicd_bot:
+  type: github
+  merge_method: squash
+  enable_deploy_command: true
