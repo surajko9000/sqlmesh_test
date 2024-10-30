@@ -13,6 +13,7 @@ SELECT
   item_id,
   'z' AS new_column_z,
   'x' AS new_column_x,
+  'b' AS new_column_b,
   event_date
 FROM sqlmesh_example.seed_model
 WHERE
